@@ -2,14 +2,15 @@ import winston, { Logger } from "winston"
 import Transport from "winston-transport"
 import { singleton } from "~/only.server/singleton"
 import { emitter } from "~/only.server/emitter"
+import { eventNames } from "~/global.names"
 
 class EmitterTransport extends Transport {
-  log(info: any, callback: () => void) {
+  log(info: unknown, callback: () => void) {
     setImmediate(() => {
       this.emit("logged", info)
     })
 
-    emitter.emit("log", JSON.stringify(info))
+    emitter.emit(eventNames.log, JSON.stringify(info))
 
     callback()
   }
