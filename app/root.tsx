@@ -29,8 +29,6 @@ export const links: LinksFunction = () => [
 ];
 
 export const loader = async () => {
-  console.debug(process.env.NODE_ENV)
-
   return {
     sseLogging: process.env.NODE_ENV === "development",
   };
