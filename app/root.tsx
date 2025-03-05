@@ -1,11 +1,17 @@
+import type { LinksFunction } from "@remix-run/node";
+
+import { useEffect } from "react"
+
 import {
   Links,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from "@remix-run/react";
-import type { LinksFunction } from "@remix-run/node";
+
+import { eventNames } from "~/global.names"
 
 import "./tailwind.css";
 
@@ -21,6 +27,14 @@ export const links: LinksFunction = () => [
     href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
   },
 ];
+
+export const loader = async () => {
+  console.debug(process.env.NODE_ENV)
+
+  return {
+    sseLogging: process.env.NODE_ENV === "development",
+  };
+}
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -40,6 +54,29 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function App() {
+export default function Root() {
+  const { sseLogging } = useLoaderData<typeof loader>()
+
+  useEffect(() => {
+    // only establish a connection if sseLogging is turned on
+    if (!sseLogging) return;
+    const source = new EventSource("/res/logs");
+    const handler = (e: MessageEvent) => {
+      try {
+        // attempt to parse the incoming message as json
+        console.log(JSON.parse(e.data));
+      } catch (err) {
+        // otherwise log it as is
+        console.log(e.data);
+      }
+    };
+    source.addEventListener(eventNames.log, handler);
+
+    return () => {
+      source.removeEventListener(eventNames.log, handler);
+      source.close();
+    };
+  }, [sseLogging]);
+
   return <Outlet />;
 }
