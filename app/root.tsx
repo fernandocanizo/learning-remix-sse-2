@@ -60,7 +60,7 @@ export default function Root() {
   useEffect(() => {
     // only establish a connection if sseLogging is turned on
     if (!sseLogging) return;
-    const source = new EventSource("/res/logs");
+    const source = new EventSource("/logs");
     const handler = (e: MessageEvent) => {
       try {
         // attempt to parse the incoming message as json
