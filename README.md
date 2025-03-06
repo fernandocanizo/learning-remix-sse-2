@@ -4,6 +4,10 @@ Learning Remix Server Sent Events (SSE) - Round two. Cause the first attempt I u
 
 I'm following David Adams' tutorial [Sending logs to the browser from actions and loaders](https://programmingarehard.com/2025/02/13/sending-logs-to-the-browser-from-actions-and-loaders.html/), he also has it on [video](https://www.youtube.com/watch?v=sMPtjhvt9T0).
 
+## Conclusion
+
+This is a convoluted example, as it involves a Singleton, and some specific "logging" case. I need a simpler explanation that tells me where to put the stuff that's sent from the server and where to handle in the frontend. Gonna keep looking for some example code or maybe do a new repo `learning-remix-sse-3`.
+
 ## From Remix
 
 - 📖 [Remix docs](https://remix.run/docs)
